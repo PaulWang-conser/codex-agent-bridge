@@ -32,10 +32,13 @@ const MAX_OUT = Number(process.env.DELEGATE_MAX_OUT || 30000); // 回传截断�
 // ---------------------------------------------------------------------------
 const AGENTS = {
   cline: {
-    desc: "Cline CLI（默认 act 模式 + auto-approve）",
+    desc: "Cline CLI（-y 无人监督：自动批准一组受限工具）",
     command: () => process.env.CLINE_BIN || "cline",
     mode: "shell",
-    args: (prompt) => [prompt],
+    // -y/--yolo：auto-approve 一组受限工具，实现非交互执行。
+    // 不加 -y 时，cline 会停在“是否批准工具调用”的交互确认上，
+    // 在无 TTY 的委派环境里会挂住直到超时。
+    args: (prompt) => ["-y", prompt],
   },
   dsh: {
     desc: "DeepSeek Harness（headless profile，答一题即退出；需已配置 headless profile）",
@@ -44,10 +47,12 @@ const AGENTS = {
     args: (prompt) => ["--profile", "headless", prompt],
   },
   omp: {
-    desc: "opencode / omp（-p 非交互模式）",
+    desc: "opencode / omp（-p 非交互 + --auto-approve 跳过批准）",
     command: () => process.env.OMP_BIN || "omp",
     mode: "direct",
-    args: (prompt) => ["-p", prompt],
+    // -p/--print：非交互模式，处理完 prompt 即退出。
+    // --auto-approve：跳过工具批准提示，否则会卡在交互确认上。
+    args: (prompt) => ["-p", "--auto-approve", prompt],
   },
   zcode: {
     desc: "ZCode CLI（-p 单次 prompt）",
