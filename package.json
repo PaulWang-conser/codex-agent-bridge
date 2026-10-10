@@ -1,0 +1,20 @@
+{
+  "name": "codex-agent-bridge",
+  "version": "0.1.0",
+  "description": "让 Codex（GPT 大脑）通过 MCP 把执行任务委派给本地 AI CLI：cline / dsh / omp / zcode / workbuddy",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "codex-agent-bridge": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1"
+  }
+}
